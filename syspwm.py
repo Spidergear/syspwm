@@ -63,20 +63,14 @@ class SysPWM(object):
 	def disable(self):
 		return self.enable(disable=True)
 
-	def set_duty_cycle(self,milliseconds):
-		# /sys/ iface, 2ms is 2000000
-		# gpio cmd,    2ms is 200
-		dc = int(milliseconds * 1000000)
+	def set_duty_cycle(self,dc):
+		dc = dc * 300
 		duty_cycle = "{pwmdir}/duty_cycle".format(pwmdir=self.pwmdir)
 		self.echo(dc,duty_cycle)
 
 	def set_frequency(self,hz):
-		per = (1 / float(hz))
-		per *= 1000    # now in milliseconds
-		per *= 1000000 # now in.. whatever
-		per = int(per)
 		period = "{pwmdir}/period".format(pwmdir=self.pwmdir)
-		self.echo(per,period)
+		self.echo(hz,period)
 
 if __name__ == "__main__":
 	from time import sleep
